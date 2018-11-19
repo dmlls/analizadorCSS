@@ -1,9 +1,9 @@
 ### Trabajo de Procesadores del Lenguaje
 
-- **DSL escogido***: CSS
+- **DSL escogido**: CSS
 - **Integrantes del grupo**:
-    - Gonzalo Cuesta Marín
-    - Diego Miguel Lozano
+> Gonzalo Cuesta Marín
+> Diego Miguel Lozano
 
-Ingeniería Informática  
+*Ingeniería Informática*  
 Universidad de Burgos
