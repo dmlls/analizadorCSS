@@ -1,6 +1,180 @@
 /**
- * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
- */options{  static = false;}PARSER_BEGIN(<?parser_name?>)
-public class <?parser_name?>{
-  public static void main(String args []) throws ParseException  {    <?parser_name?> parser = new <?parser_name?>(System.in);    while (true)    {      System.out.println("Reading from standard input...");      System.out.print("Enter an expression like \"1+(2+3)*4;\" :");      try      {        switch (parser.one_line())        {          case 0 :           System.out.println("OK.");          break;          case 1 :           System.out.println("Goodbye.");          break;          default :           break;        }      }      catch (Exception e)      {        System.out.println("NOK.");        System.out.println(e.getMessage());        break;
-      }      catch (Error e)      {        System.out.println("Oops.");        System.out.println(e.getMessage());        break;      }    }  }}PARSER_END(<?parser_name?>)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >}TOKEN :{  < CONSTANT : (< DIGIT >)+ >| < #DIGIT : [ "0"-"9" ] >}int one_line() :{}{  sum() ";"  {    return 0;  }| ";"  {    return 1;  }}void sum() :{}{  term()  (    (      < PLUS >    | < MINUS >    )    term()  )*}void term() :{}{  unary()  (    (      < MULTIPLY >    | < DIVIDE >    )    unary()  )*}void unary() :{}{  < MINUS > element()| element()}void element() :{}{  < CONSTANT >| "(" sum() ")"}
+* Analizador CSS - Trabajo
+*
+* PROCESADORES DEL LENGUAJE
+* Ingeniería Informática
+* UNIVERSIDAD DE BURGOS
+*
+* @author Gonzalo Cuesta Marín
+* @author Diego Miguel Lozano
+* @date 21-11-2018
+* @version 0.1
+*/
+
+options {
+	BUILD_TOKEN_MANAGER = true;
+	COMMON_TOKEN_ACTION = false;
+	STATIC = false;
+//	DEBUG_TOKEN_MANAGER = true;
+}
+
+PARSER_BEGIN(analizadorCSS)
+
+import java.util.Set;
+import java.util.LinkedHashSet; // devuelve los elementos en el mismo orden en el que se añadieron
+
+public class analizadorCSS {
+
+	public static void main(String args[]) throws java.io.FileNotFoundException {
+
+		analizadorCSSTokenManager tkmgr;
+
+		if (args.length < 1) { // en caso de no pasar fichero, leemos de la entrada
+			tkmgr = new analizadorCSSTokenManager(new SimpleCharStream(System.in));
+		} else {
+		  	tkmgr = new analizadorCSSTokenManager(
+						new SimpleCharStream(new java.io.FileInputStream(args[0]),0,0));
+		}
+		
+		Token tk;
+
+		try {
+			while ((tk = tkmgr.getNextToken()).kind != EOF);
+			printResult(tkmgr);
+		} catch(TokenMgrError err) {
+			System.out.println("\n¡Vaya! Algo no ha ido como debía :(\n");
+			throw err;
+		}	
+	}
+
+	/**
+	* Imprime el resultado del análisis.
+	*
+	* @param tkmgr token manager
+	*/
+	private static void printResult(analizadorCSSTokenManager tkmgr) { 
+		System.out.println(" - La hoja de estilos tiene " + tkmgr.totalRules + " reglas CSS en total.\n");
+		System.out.println(" - Contiene un total de " + tkmgr.totalDeclarations + " declaraciones.\n");
+		System.out.println(" - La regla con mayor número de declaraciones es \"" + tkmgr.ruleMostDecl + "\",");
+		System.out.println("   con un total de " + tkmgr.nRuleMostDecl + " declaraciones.\n");
+		System.out.println(" - La regla con el selector más largo es \"" + tkmgr.longestSelector + "\".\n");
+		System.out.println(" - En la hoja de estilos, se modifican las siguientes propiedades:");
+		printProperties(tkmgr);
+		System.out.println();
+	}
+
+	/**
+	* Imprime la lista de propiedades de la hoja de estilos.
+	*
+	* @param tkmgr token manager
+	*/
+	private static void printProperties(analizadorCSSTokenManager tkmgr) {
+		for(String property : tkmgr.properties) {
+			System.out.println("      " + property);
+		}
+	}
+	  
+}
+
+PARSER_END(analizadorCSS)
+
+TOKEN_MGR_DECLS:
+{
+  /**
+  *	Definiciones de variables.
+  */
+	int totalRules = 0; // número total de reglas CSS (se ignoran reglas-at).
+	int totalDeclarations = 0; // número total de declaraciones
+	String currentRule = ""; // selector de la regla actual
+	int currentDeclarations = 0; // número de declaraciones de la regla actual
+	String ruleMostDecl = ""; // selector de la regla con más declaraciones
+	int nRuleMostDecl = 0; // número de declaraciones de la regla con más declaraciones
+	String longestSelector = ""; // selector más largo
+	Set<String> properties = new LinkedHashSet<String>(); // propiedades modificadas (no repetidas)
+
+	
+
+  /**
+  *	Definiciones de métodos.
+  */
+
+	/**
+	* Actualiza la regla con mayor número de declaraciones.
+	*
+	* @param currentRule selector de la regla actual
+	* @param currentDeclarations número de declaraciones de la regla actual
+	*/
+	void updteRuleMostDecl(String currentRule, int currentDeclarations) {
+		if(currentDeclarations > nRuleMostDecl) {
+		  	ruleMostDecl = currentRule;
+			nRuleMostDecl = currentDeclarations;
+		}
+	}
+	/**
+	* Actualiza el selector más largo.
+	*
+	* @param currentRule selector de la regla actual
+	*/
+	void updteLongestSelector(String currentRule) {
+		if(currentRule.length() > longestSelector.length()) {
+			longestSelector = currentRule;
+		}
+	}
+}
+
+SKIP:
+{
+ 	< COMMENT_START: "/*" >: COMMENT
+}
+
+<COMMENT> SKIP:
+{
+  	< COMMENT_END: "*/" >: DEFAULT
+| 	< COMMENT_BODY: (~[]) >
+}
+
+/**
+* Definiciones de tókenes.
+*/
+TOKEN:
+{
+	< #SELECTOR: (["A"-"Z","a"-"z","0"-"9",","," ", "\t",".","#","*",">","+","~",
+				 "[","]","(",")","=","|","^","$","-","_","\"",":"])+ >
+| 	< #PROPERTY: (([":"]){1,2})? (["A"-"Z","a"-"z","<",">","-","(",")","@"])+ >
+|	< #EOL: ("\n" | "\r")* >
+| 	< #ESP: (" " | "\t" | "\n" | "\r")* >
+}
+
+SKIP:
+{
+	< AT_RULE: "@" <SELECTOR> <EOL> ((~[";","{"])+ ";" | "{") >
+	// una regla-at puede ser de "línea" (ej. @import) o anidada (ej. @media)							
+}
+
+TOKEN:
+{
+ 	< RULE_SELECTOR: <SELECTOR> > {	currentRule = image.toString().trim();
+ 	  								updteLongestSelector(currentRule); }
+|	< RULE_START: <EOL> "{" > { totalRules++; SwitchTo(RULE_BODY); }
+}
+
+
+<RULE_BODY> TOKEN:
+{
+	< RULE_PROPERTY: <PROPERTY> > { properties.add(image.toString().trim()); }
+|   < VALUE: ":" (~[";","}"])+ (";")? > { totalDeclarations++;
+										  currentDeclarations++; }
+	 // el "}" opcional en caso de que estemos dentro de una regla-at anidada
+|   < RULE_END: ("}" <ESP>)? "}" > { updteRuleMostDecl(currentRule, currentDeclarations);
+								     currentRule = ""; // reiniciamos valores
+								     currentDeclarations = 0;
+								     SwitchTo(DEFAULT); }
+}
+
+<*> TOKEN:
+{
+	< (~[]) > { System.out.print(image.toString()); }
+	// imprimimos para ver si se está ignorando algo que no debiéramos
+}
+
+
