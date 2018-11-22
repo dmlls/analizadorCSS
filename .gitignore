@@ -3,3 +3,9 @@ fuente/bin/
 *.java
 
 *.class
+
+/fuente/.settings
+
+/fuente/.classpath
+
+/fuente/.project
