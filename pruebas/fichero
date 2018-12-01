@@ -15,8 +15,7 @@ table td, table th {
 
 /* All <th>s within <thead>s that are within <table>s */
 table thead th {
-  color: white;
-  background: black;
+  color: green;
 }
 
 /* All <td>s preceded by another <td>,
@@ -43,7 +42,7 @@ table tfoot th {
 table th + td {
   text-align: right;
   border-top-width: 5px;
-  color: white;
+  color: white; 
   background: black;
 }
 
@@ -59,4 +58,22 @@ table th + td {
    also have an attribute "lang" with the value "fr" */
 .with-currency[lang="fr"] td:last-child::after {
   content: ' €';
+}
+
+
+body {
+color: hsl(0, 100, 50); //RED
+background-color:hsla(120,100,50,0.3); //GREEN
+background-color-repeat: #FFFFFF //WHITE
+}
+
+body-two {
+color: rgb(0,0,255); //BLUE
+background-color:rgba(0,0,255,30%); // BLUE with opacity
+color-repeat: #00F //BLUE
+}
+
+body-three {
+color: #FFFF00; //YELLOW
+color-repeat: rgb(255,255,0); //RED
 }
