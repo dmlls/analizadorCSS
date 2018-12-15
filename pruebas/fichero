@@ -64,13 +64,13 @@ table th + td {
 body {
 color: hsl(0, 100, 50); 
 background-color:hsla(120,100,50,0.3); 
-background-color-repeat: #FFFFFF 
+background-color-repeat: #FFFFFF; 
 }
 
 body-two {
-color: rgb(0,0,255);
+color: rgb(0,0,255); 
 background-color:rgba(0,0,255,30%); 
-color-repeat: #00F 
+color-repeat: #00F; 
 }
 
 body-three {
