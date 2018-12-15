@@ -7,8 +7,8 @@
 *
 * @author Gonzalo Cuesta Marín
 * @author Diego Miguel Lozano
-* @date 21-11-2018
-* @version 0.1
+* @date 08-13-2018
+* @version 0.2
 */
 
 options {
@@ -28,8 +28,6 @@ import java.util.regex.Pattern; // Indica el patrón que buscaremos posteriormen
 import java.lang.Math; //Utilidad matemática.
 import java.lang.reflect.Field; // Da información sobre un determinado campo de una clase. 
 								
-
-
 public class analizadorCSS {
 
 	public static void main(String args[]) throws java.io.FileNotFoundException {
@@ -67,11 +65,13 @@ public class analizadorCSS {
 		System.out.println(" - La regla con el selector más largo es \"" + tkmgr.longestSelector + "\".\n");
 		System.out.println(" - En la hoja de estilos, se modifican las siguientes propiedades:");
 		printProperties(tkmgr);
-		System.out.println(" - Se ha utilizado un total de " + tkmgr.colorsrgb.size() + " colores distintos.\n");
-		System.out.println(" - En total ha habido " + totalReferencesColors(tkmgr,false) + " referencias a colores, de las cuales: \n");
-		totalReferencesColors(tkmgr,true);
-		System.out.println();
-
+		if(tkmgr.colorsrgb.size() > 0) { 
+			System.out.println(" - Se ha utilizado un total de " + tkmgr.colorsrgb.size() + " colores distintos.\n");
+			System.out.println(" - En total ha habido " + totalReferencesColors(tkmgr,false) + " referencias a colores, de las cuales: \n");
+			totalReferencesColors(tkmgr,true);
+		} else {
+		  	System.out.println(" - No se ha utilizado ningún color. \n");
+		}
 	}
 
 	/**
@@ -104,10 +104,7 @@ public class analizadorCSS {
 	    }
 		return tkmgr.totalRGBformat + tkmgr.totalRGBAformat + tkmgr.totalHSLformat + tkmgr.totalHSLAformat
 				+ tkmgr.totalRRGGBBformat + tkmgr.totalNameColorformat + tkmgr.totalRGBfuncformat;
-	}
-
-	
-	  
+	}		  
 }
 
 PARSER_END(analizadorCSS)
@@ -291,6 +288,7 @@ TOKEN_MGR_DECLS:
 	}
 }
 
+
 SKIP:
 {
  	< COMMENT_START: "/*" >: COMMENT
@@ -325,7 +323,7 @@ TOKEN:
 | 	< #NUM_PER: ((["0"-"9"]){1,3}("%")?) >
 |   < #NUM_DEC: ((("0")("."(["0"-"9"])+)?)|"1") >
 |	< #EOL: ("\n" | "\r")* >
-| 	< #ESP: (" " | "\t" | "\n" | "\r")* >
+| 	< #ESP: (" " | "\t" | "\n" | "\r") >
 }
 
 SKIP:
@@ -377,16 +375,7 @@ TOKEN:
 |   < END_COLOR: ";" > { SwitchTo(RULE_BODY); }
 }
 
-<*> TOKEN:
+< * >SKIP:
 {
-	< (~[]) > { System.out.print(image.toString()); }
-	// imprimimos para ver si se está ignorando algo que no debiéramos
+	< IGN: < ESP > >
 }
-
-
-
-
-
-
-
-
