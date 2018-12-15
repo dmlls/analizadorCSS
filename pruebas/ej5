@@ -9,6 +9,7 @@ table {
    Comma is not a combinator, it just allows you to target
    several selectors with the same CSS ruleset */
 table td, table th {
+  color: #FFFF00;
   border : 1px solid black;
   padding: 0.5em 0.5em 0.4em;
 }
@@ -22,16 +23,21 @@ table thead th {
    within a <tbody>, within a <table> */
 table tbody td + td {
   text-align: center;
+  background-color:rgba(0,0,255,30%); 
 }
 
 /* All <td>s that are a last child,
    within a <tbody>, within a <table> */
 table tbody td:last-child {
   text-align: right
+  background-color:hsla(120,100,50,0.3); 
+  background-color-repeat: #FFFFFF; 
 }
 
 /* All <th>s, within a <tfoot>s, within a <table> */
 table tfoot th {
+  color: hsl(0, 100, 50);
+  color-repeat: #00F;  
   text-align: right;
   border-top-width: 5px;
   border-left: none;
@@ -57,23 +63,6 @@ table th + td {
    appearing within elements with the class "with-currency" that
    also have an attribute "lang" with the value "fr" */
 .with-currency[lang="fr"] td:last-child::after {
-  content: ' €';
+  content: '€';
 }
 
-
-body {
-color: hsl(0, 100, 50); 
-background-color:hsla(120,100,50,0.3); 
-background-color-repeat: #FFFFFF; 
-}
-
-body-two {
-color: rgb(0,0,255); 
-background-color:rgba(0,0,255,30%); 
-color-repeat: #00F; 
-}
-
-body-three {
-color: #FFFF00; 
-color-repeat: rgb(255,255,0); 
-}
