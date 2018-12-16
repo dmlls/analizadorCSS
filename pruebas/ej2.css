@@ -1,0 +1,41 @@
+/**
+ * Ejemplo más completo con mala indentación
+ * y comentarios en lugares arbitrarios.
+ */
+
+/* Basic table setup */
+table
+{
+  	  font	: 1em sans-serif;
+  border-collapse : collapse;
+ 
+ border-spacing : 0;
+	}
+
+/* All <td>s within a <table> and all <th>s within a <table>
+   Comma is not a combinator, it just allows you to target
+   several selectors with the same CSS ruleset */
+table td,
+table th {
+  border : /* random comment */ 1px solid black; padding:
+ 0.5em 0.5em 0.4em;
+}
+
+/* All <th>s within <thead>s that are within <table>s */
+table thead th {
+ color: white /* this is how you don't do it */ ;
+  background: black;
+}
+
+/* All <td>s preceded by another <td>,
+   within a <tbody>, within a <table> */
+table tbody td + td {
+ /* another comment */ text-align: center
+}
+
+/* All <td>s that are a last child,
+   within a <tbody>, within a <table> */
+table tbody
+td:last-child
+{ text-align: right
+}

@@ -1,0 +1,23 @@
+/**
+ * Ejemplito simple para comprobar
+ * el correcto funcionamiento del
+ * analizador.
+ */
+
+@media screen, print {
+  body { line-height: 1.2 }
+}
+
+h1 {
+  color: blue;
+  background-color: yellow;
+  border: 1px solid black;
+}
+
+p {
+  color: red;
+}
+
+p, li {
+  text-decoration: underline;
+}
