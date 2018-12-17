@@ -395,10 +395,8 @@ TOKEN:
 */
 <RULE_BODY> TOKEN:
 {
-	< COLOR: <COLOR_PROPERTY> > { properties.add(image.toString().trim()); SwitchTo(COLOR_VALUES); }
-| 	< RULE_PROPERTY: <PROPERTY> > { properties.add(image.toString().trim()); }
-|   < VALUE: ":" (~[";","}"])+ (";")? > { totalDeclarations++;
- 										  currentDeclarations++; }		
+	< COLOR: <COLOR_PROPERTY> > { properties.add(image.toString().trim()); SwitchTo(COLOR_VALUE); }
+| 	< RULE_PROPERTY: <PROPERTY> > { properties.add(image.toString().trim()); SwitchTo(OTHER_VALUE); }
 	 // el "}" opcional en caso de que estemos dentro de una regla-at anidada
 |   < RULE_END: ("}" (<ESP>)*)? "}" > { updteRuleMostDecl(currentRule, currentDeclarations);
 								     	currentRule = ""; // reiniciamos valores
@@ -407,9 +405,9 @@ TOKEN:
 }
 
 /**
-* Colores.
+* Valores para colores.
 */
-<COLOR_VALUES> TOKEN:
+<COLOR_VALUE> TOKEN:
 {
     < INI: ":" > { totalDeclarations++;
  				   currentDeclarations++; }
@@ -438,6 +436,19 @@ TOKEN:
 						     	SwitchTo(DEFAULT); }
 |   < IGNORE: (~[";","}"]) >
 }
+
+/**
+* Resto de valores.
+*/
+<OTHER_VALUE> TOKEN:
+{
+   < VALUE: ":" (~[";","}"])+ (";")? > { totalDeclarations++;
+ 										 currentDeclarations++;
+ 										 SwitchTo(RULE_BODY); }
+}
+
+
+
 
 /**
 * Ignorar blancos.
