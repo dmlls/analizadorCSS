@@ -340,7 +340,9 @@ TOKEN:
 {
 	< #SELECTOR: (["A"-"Z","a"-"z","0"-"9",",",".","#","*",">","+","~",
 				 "[","]","(",")","=","|","^","$","-","_","\"",":"," ","\t","\n","\r"])+ >
-|   < #COLOR_PROPERTY: ("background" | "border" | "color")("-"(["a"-"z"])+)* >
+|   < #COLOR_PROPERTY: ("background-color" | "border-block-end-color" | "border-block-start-color" | "border-bottom-color" | "border" | "border-color" 
+						| "border-inline-end-color" | "border-inline-start-color" | "border-left-color" | "border-right-color" | "border-top-color"
+						| "caret-color" | "column-rule-color" | "outline-color" | "text-decoration-color" | "text-emphasis-color" | "color") >
 | 	< #PROPERTY: (([":"]){1,2})? (["A"-"Z","a"-"z","<",">","-","(",")","@"])+ > // resto de propiedades
 | 	< #RGB_FUNC: ("rgb")<COLOR_THREE> >
 | 	< #HSL_FUNC: ("hsl")<COLOR_THREE> >
@@ -411,30 +413,24 @@ TOKEN:
 {
     < INI: ":" > { totalDeclarations++;
  				   currentDeclarations++; }
-| 	< COLOR_RGB: <RGB> > { colorAdd(image.toString().trim()); totalRGBformat++; }
-|   < NAME_COLOUR: <NAME_COLOR> > { Color color;
+| 	< COLOR_RGB: <RGB>(";")? > { colorAdd(image.toString().replace(";","").trim()); totalRGBformat++; SwitchTo(RULE_BODY);}
+|   < NAME_COLOUR: <NAME_COLOR>(";")? > { Color color;
 									try {
 									    // adquirimos de la clase Color el objeto Color que coincida con la cadena introducida
-    									Field field = Class.forName("java.awt.Color").getField(image.toString().trim()); 
+    									Field field = Class.forName("java.awt.Color").getField(image.toString().replace(";","").trim()); 
    										color = (Color)field.get(null);
 									} catch (Exception e) {
 									  	// si resulta que no hay ninguna coincidencia dejamos el valor de color a null
     									color = null; 
 									}
 									// si ha habido una coincidencia añadimos el color obtenido (de tipo Color) a la lista de colores
-									if (color != null) { colorsrgb.add(color.toString()); totalNameColorformat++; }}
-|   < COLOR_RRGGBB:  <RRGGBB> > { colorAdd(image.toString().trim()); totalRRGGBBformat++; }
-|   < RGB_F:  <RGB_FUNC> > { colorAdd(image.toString().trim()); totalRGBfuncformat++; }
-|   < HSL:  <HSL_FUNC> > { colorAdd(image.toString().trim()); totalHSLformat++; }
-|   < HSLA:  <HSLA_FUNC> > { colorAdd(image.toString().trim()); totalHSLAformat++; }
-|   < RGBA:  <RGBA_FUNC> > { colorAdd(image.toString().trim()); totalRGBAformat++; }
-|   < END_COLOR: ";" > { SwitchTo(RULE_BODY); /* seguimos con el resto de declaraciones */ }
-  	// si fuera la última regla del bloque podría no tener punto y coma
-|   < LAST_RULE: <RULE_END> > { updteRuleMostDecl(currentRule, currentDeclarations);
-						     	currentRule = ""; // reiniciamos valores
-						     	currentDeclarations = 0;
-						     	SwitchTo(DEFAULT); }
-|   < IGNORE: (~[";","}"]) >
+									if (color != null) { colorsrgb.add(color.toString()); totalNameColorformat++; }SwitchTo(RULE_BODY);}
+|   < COLOR_RRGGBB:  <RRGGBB>(";")? > { colorAdd(image.toString().replace(";","").trim()); totalRRGGBBformat++; SwitchTo(RULE_BODY);}
+|   < RGB_F:  <RGB_FUNC>(";")? > { colorAdd(image.toString().replace(";","").trim()); totalRGBfuncformat++; SwitchTo(RULE_BODY);}
+|   < HSL:  <HSL_FUNC>(";")? > { colorAdd(image.toString().replace(";","").trim()); totalHSLformat++; SwitchTo(RULE_BODY);}
+|   < HSLA:  <HSLA_FUNC>(";")? > { colorAdd(image.toString().replace(";","").trim()); totalHSLAformat++; SwitchTo(RULE_BODY);}
+|   < RGBA:  <RGBA_FUNC>(";")? > { colorAdd(image.toString().replace(";","").trim()); totalRGBAformat++; SwitchTo(RULE_BODY);}
+|   < IGNORE: ~[";","}"] >
 }
 
 /**
