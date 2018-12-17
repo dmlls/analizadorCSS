@@ -1,0 +1,34 @@
+/**
+ * Ejemplo sobre el uso de colores.
+ *
+ */
+
+/* Table Color */
+th {
+  background-color: #FFA500; /*Orange*/
+  color: yellow;	
+}
+
+/* Title 1 */
+h1 {
+  font-size: 36px;
+  background-color: #000; /*Black*/
+  color: hsl(0, 0%, 100%); /*White*/
+  font-family: 'Open Sans';
+}
+
+/* Paragraph Style*/
+p {
+  font-family: 'Open Sans';
+  font-size: 14px;
+  color: rgb(0, 128, 0); /*Green*/
+  line-height: 18px;
+  margin-bottom: 20px;
+}
+
+/* Date Style */
+.date {
+  font-size: 36px;
+  background-color: yellow; 
+  color: hsl(0, 0%, 100%) /*White*/
+}
