@@ -33,9 +33,9 @@ table tbody td + td {
  /* another comment */ text-align: center
 }
 
-/* All <td>s that are a last child,
-   within a <tbody>, within a <table> */
+/***** All <td>s that are a last child,
+ * within a <tbody>, within a <table> *****/
 table tbody
-td:last-child
+td:last-child /* tricky *** comment * / */
 { text-align: right
 }

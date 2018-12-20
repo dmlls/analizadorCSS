@@ -1,5 +1,5 @@
 /**
- * Ejemplo más completo sobre el uso de colores.
+ * Ejemplo centrado en el uso de colores.
  *
  */
 
@@ -14,29 +14,31 @@ h1 {
   font-size: 36px;
   color: #000;	/*Dark*/
   font-family: 'Open Sans';
-}
-
-/* Boton Style */
-boton {
-  background-color: #ccc; /*Gray*/
-  color: rgba(0, 0, 255, 100%); /*Blue*/
-  width: 100px;
-  padding: 20px;
-  border: 5px solid hsla(240, 100%, 50%, 100%); /*Blue*/
-  border-radius: 5px;
+  background: darkGray; /*Dark gray*/
 }
 
 /* Paragraph Style*/
 p {
+  font-size: 36px;
+  color: hsl(0, 0%, 100%); /*White*/
+  border : 1px solid black; /*Black*/
+}
+
+/* Date Style */
+.date {
   font-family: 'Open Sans';
   font-size: 14px;
   color: rgb(0, 128, 0); /*Green*/
   line-height: 18px;
   margin-bottom: 20px;
+  border: 5px solid hsla(240, 100%, 50%, 100%); /*Blue*/
+  border-radius: 5px;
 }
 
-/* Date Style */
-.date {
-font-size: 36px;
-color: hsl(0, 0%, 100%); /*White*/
+/* Table Style */
+.table {
+  background-color: #ccc; /*Gray*/
+  color: rgba(0, 0, 255, 100%); /*Blue*/
+  width: 100px;
+  padding: 20px;
 }

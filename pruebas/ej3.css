@@ -1,7 +1,18 @@
 /**
- * Ejemplo sobre el uso de colores.
+ * Ejemplo completo, con colores y reglas-@.
  *
  */
+
+@document url(http://www.w3.org/),
+          url-prefix(http://www.w3.org/Style/),
+          domain(mozilla.org),
+          regexp("https:.*") {
+  /* Make the above-mentioned pages really ugly */
+  body {
+    color: purple;
+    background: yellow;
+  }
+}
 
 /* Table Color */
 th {
@@ -28,7 +39,7 @@ p {
 
 /* Date Style */
 .date {
-  font-size: 36px;
   background-color: yellow; 
   color: hsl(0, 0%, 100%) /*White*/
+  border-spacing : 0;
 }
